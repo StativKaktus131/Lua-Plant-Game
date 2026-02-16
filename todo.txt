@@ -1,8 +1,0 @@
-TODO:
-
-==== Plant Game ====
-
-[ ] Plant Grid
-[ ] Watering Mechanic
-[ ] Cutting Mechanic
-[ ] Inventory
