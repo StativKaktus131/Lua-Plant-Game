@@ -1,9 +1,10 @@
 PI = 3.14159265359
 TWO_PI = 2 * PI
 
--- adds resource folder to beginning of path
-function URes (str)
-    return "../res/" .. str
+
+-- mouse over
+function UMouseOver (rect)
+	return MousePos.x > rect[1] and MousePos.y > rect[2] and MousePos.x < rect[1] + rect[3] and MousePos.y < rect[2] + rect[4]
 end
 
 -- converts degrees to radians

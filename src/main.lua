@@ -4,14 +4,38 @@ require("src.button")
 Assets = require("src.sprites")
 
 local plants = {}
+local buttons = {}
 local timer = 0
 local days = 0
 
+Cursor = 0
+MousePos = {x=0,y=0}
+CursorState = {
+	Arrow = 1,
+	Hand = 2,
+	Seed = 3
+}
+
+local CURSOR_SCALE = 2
 DAY_TIME = 3 -- time of day in seconds
 
 
 function passDay ()
 	days = days + 1
+end
+
+function setCursorState (cs)
+	Cursor = cs
+end
+
+function drawCursor ()
+	local currentCursor = Assets.cursors[Cursor]
+
+	-- set empty cursor
+	love.mouse.setCursor(love.mouse.newCursor("res/cursors/cur_empty.png", 0, 0))
+
+	love.graphics.setColor(1.0, 1.0, 1.0)
+	love.graphics.draw(currentCursor.img, MousePos.x - currentCursor.hotx * CURSOR_SCALE, MousePos.y - currentCursor.hoty * CURSOR_SCALE, 0, CURSOR_SCALE, CURSOR_SCALE)
 end
 
 
@@ -28,13 +52,18 @@ function love.load ()
 		end
 	end
 
+	table.insert(buttons, Button:new(600, 50, function ()
+		setCursorState(CursorState.Seed)
+	end))
+
 	love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
 	Assets.load()
-	
 end
 
 function love.update (dt)
+	MousePos.x, MousePos.y = love.mouse.getPosition()
+
 	local keepTimer = timer % DAY_TIME
 	timer = timer + dt
 
@@ -46,20 +75,25 @@ function love.update (dt)
 	days = math.floor(timer / DAY_TIME)
 
 	UForEach(plants, function (element) element:update(dt) end)
+	UForEach(buttons, function (element) element:update(dt) end)
 
 	-- check if mouse is over
+	-- only check if not already seed
+
+	if Cursor == CursorState.Seed then
+		return
+	end
 	local isOver = false
-	local mx, my = love.mouse.getPosition()
 	UForEach(plants, function (element)
-		if element:mouseOver(mx, my) then
+		if UMouseOver(element.rect) then
 			isOver = true
 		end
 	end)
 
 	if isOver then
-		love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
+		setCursorState(CursorState.Hand)
 	else
-		love.mouse.setCursor(love.mouse.getSystemCursor("arrow"))
+		setCursorState(CursorState.Arrow)
 	end
 end
 
@@ -69,6 +103,7 @@ function love.draw ()
 	love.graphics.rectangle("fill", 0, 0, Width, Height)
 
 	UForEach(plants, function (element) element:draw() end)
+	UForEach(buttons, function (element) element:draw() end)
 
 	-- time scale
 	local segments = 8
@@ -78,6 +113,8 @@ function love.draw ()
 
 	love.graphics.setColor(0.0, 0.0, 0.0)
 	love.graphics.print(days, 10, 100)
+
+	drawCursor()
 end
 
 function love.keypressed (key)
@@ -86,4 +123,18 @@ function love.keypressed (key)
 	if key == "escape" then
 		love.event.quit(0)
 	end
+end
+
+function love.mousepressed ()
+	UForEach(plants, function (plant)
+		if UMouseOver(plant.rect) then
+			plant:mouseDown()
+		end
+	end)
+
+	UForEach(buttons, function (btn)
+		if UMouseOver(btn.rect) then
+			btn.mouseDown()
+		end
+	end)
 end

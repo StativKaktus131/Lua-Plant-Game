@@ -8,9 +8,8 @@ local plantSize = 128
 PlantState = {
 	Empty = 0,
 	Seedling = 1,
-	Small = 2,
-	Grown = 3,
-	Fruit = 4
+	Grown = 2,
+	Fruit = 3
 }
 
 -- Plant Object
@@ -28,6 +27,7 @@ function Plant:new (x, y)
 		x = x,
 		y = y,
 		state = PlantState.Empty,
+		-- state = math.random(3),
 		rect = {x - plantSize / 2, y - plantSize / 2, plantSize, plantSize}
 	}
 
@@ -46,15 +46,33 @@ function Plant:update (dt)
 end
 
 function Plant:draw ()
+
+	-- draw bg if planting to seed
+	if UMouseOver(self.rect) and Cursor == CursorState.Seed then
+		love.graphics.setColor(203/255, 219/255, 252/255)
+		love.graphics.rectangle("fill", self.rect[1], self.rect[2], self.rect[3], self.rect[4])
+	end
+
 	-- set clear color to white, so sprite wont be altered
 	love.graphics.setColor(1.0, 1.0, 1.0)
 	
 	local w, _ = Assets.images.pot:getDimensions()
 	local scalar = plantSize / w
 
-	love.graphics.draw(Assets.images.pot, self.x - plantSize / 2, self.y - plantSize / 2, 0, scalar, scalar)
+	love.graphics.draw(Assets.images.pot, self.rect[1], self.rect[2], 0, scalar, scalar)
+
+	-- draw plant
+	if self.state == PlantState.Empty then
+		return
+	end
+
+	love.graphics.draw(Assets.images.sprites.plant, Assets.quads.plant[self.state], self.rect[1], self.rect[2], 0, scalar, scalar)
 end
 
-function Plant:mouseOver (mx, my) 
-	return mx > self.rect[1] and my > self.rect[2] and mx < self.rect[1] + self.rect[3] and my < self.rect[2] + self.rect[4]
+function Plant:mouseDown ()
+	if Cursor == CursorState.Seed then
+		-- plant if cursor is seed
+		self.state = PlantState.Seedling
+		setCursorState(CursorState.Arrow)
+	end
 end
