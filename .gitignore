@@ -1,3 +1,4 @@
 /res
-*.pp
+*.py
 *.sh
+*.txt
