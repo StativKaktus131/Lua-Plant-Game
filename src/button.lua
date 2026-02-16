@@ -8,11 +8,14 @@ Button = {
     mouseDown = function () end -- empty func by default
 }
 
-function Button:new (x, y, mouseDown)
+function Button:new (anchor, x, y, mouseDown)
+    local tempX = 0.5 * (anchor.x + 1) * Width - 0.5 * (anchor.x + 1) * buttonSize + x
+    local tempY = 0.5 * (anchor.y + 1) * Height - 0.5 * (anchor.y + 1) * buttonSize + y
+
     local ret = {
-        x = x,
-        y = y,
-        rect = {x - buttonSize / 2, y - buttonSize / 2, buttonSize, buttonSize},
+        x = tempX,
+        y = tempY,
+        rect = {tempX, tempY, buttonSize, buttonSize},
         mouseDown = mouseDown
     }
     self.__index = self

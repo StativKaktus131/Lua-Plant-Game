@@ -2,6 +2,7 @@ require("src.plant")
 require("src.util")
 require("src.button")
 Assets = require("src.sprites")
+Anchor = require("src.anchor")
 
 local plants = {}
 local buttons = {}
@@ -52,7 +53,7 @@ function love.load ()
 		end
 	end
 
-	table.insert(buttons, Button:new(600, 50, function ()
+	table.insert(buttons, Button:new(Anchor.BottomRight, 0, 0, function ()
 		setCursorState(CursorState.Seed)
 	end))
 
