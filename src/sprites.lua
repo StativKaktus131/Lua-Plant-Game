@@ -1,16 +1,20 @@
-function loadSprites ()
-	IMG_POT = love.graphics.newImage("res/pot.png")
-	
+local assets = {}
 
-	-- seeds
-	SPRITE_SEED = love.graphics.newImage("res/seeds.png")
-	local w, h = SPRITE_SEED:getDimensions()
-	QUAD_SEED = {
-		NoOutline = love.graphics.newQuad(0, 0, 16, 16, SPRITE_SEED),
-		Outline = love.graphics.newQuad(16, 0, 16, 16, SPRITE_SEED)
+function assets.load()
+	assets.images = {
+		pot = love.graphics.newImage("res/pot.png"),
+
+		sprites = {
+			seeds = love.graphics.newImage("res/seeds.png")
+		}
+	}
+
+	assets.quads = {
+		seeds = {
+			noOutline = love.graphics.newQuad(0, 0, 16, 16, assets.images.sprites.seeds),
+			outline = love.graphics.newQuad(16, 0, 16, 16, assets.images.sprites.seeds)
+		}
 	}
 end
 
-function drawSprite (sprite, quad, x, y)
-	love.graphics.draw(sprite, quad, x, y)
-end
+return assets

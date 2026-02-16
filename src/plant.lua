@@ -1,4 +1,4 @@
-require("sprites")
+require("src.sprites")
 
 -- size in pixels
 local plantSize = 128
@@ -49,10 +49,10 @@ function Plant:draw ()
 	-- set clear color to white, so sprite wont be altered
 	love.graphics.setColor(1.0, 1.0, 1.0)
 	
-	local w, _ = IMG_POT:getDimensions()
+	local w, _ = Assets.images.pot:getDimensions()
 	local scalar = plantSize / w
 
-	love.graphics.draw(IMG_POT, self.x - plantSize / 2, self.y - plantSize / 2, 0, scalar, scalar)
+	love.graphics.draw(Assets.images.pot, self.x - plantSize / 2, self.y - plantSize / 2, 0, scalar, scalar)
 end
 
 function Plant:mouseOver (mx, my) 

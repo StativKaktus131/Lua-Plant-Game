@@ -1,7 +1,7 @@
-require("plant")
-require("util")
-require("sprites")
-require("button")
+require("src.plant")
+require("src.util")
+require("src.button")
+Assets = require("src.sprites")
 
 local plants = {}
 local timer = 0
@@ -30,9 +30,8 @@ function love.load ()
 
 	love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
-
-	loadSprites()
-
+	Assets.load()
+	
 end
 
 function love.update (dt)
