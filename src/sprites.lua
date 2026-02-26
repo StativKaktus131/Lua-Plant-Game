@@ -3,17 +3,28 @@ local assets = {}
 function assets.load()
 	assets.images = {
 		pot = love.graphics.newImage("res/pot.png"),
+		soil = love.graphics.newImage("res/soil.png"),
+
+		backgrounds = {
+			layout = love.graphics.newImage("res/backgrounds/layout.png")
+		},
 
 		sprites = {
-			seeds = love.graphics.newImage("res/seeds.png"),
+			tools = love.graphics.newImage("res/tools.png"),
 			plant = love.graphics.newImage("res/plant.png")
 		}
 	}
 
 	assets.quads = {
-		seeds = {
-			noOutline = love.graphics.newQuad(0, 0, 16, 16, assets.images.sprites.seeds),
-			outline = love.graphics.newQuad(16, 0, 16, 16, assets.images.sprites.seeds)
+		tools = {
+			-- seeds
+			love.graphics.newQuad(0, 0, 16, 16, assets.images.sprites.tools),
+			-- seeds outlined
+			love.graphics.newQuad(16, 0, 16, 16, assets.images.sprites.tools),
+			-- scissors
+			love.graphics.newQuad(0, 16, 16, 16, assets.images.sprites.tools), 
+			-- scissors outlined
+			love.graphics.newQuad(16, 16, 16, 16, assets.images.sprites.tools), 
 		},
 		plant = {
 			-- seedling
@@ -43,6 +54,12 @@ function assets.load()
 			img = love.graphics.newImage("res/cursors/cur_seed.png"),
 			hotx = 0,
 			hoty = 15
+		},
+		-- scissors
+		{
+			img = love.graphics.newImage("res/cursors/cur_scissors.png"),
+			hotx = 2,
+			hoty = 13
 		},
 
 		empty = love.mouse.newCursor("res/cursors/cur_empty.png", 0, 0)
